@@ -14,7 +14,7 @@ public class CicleRotateScript : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		canRotate = true;
-		ChangeRotationCoroutine = StartCoroutine(ChangeRotation());
+		ChangeRotationCoroutine = StartCoroutine(ChangeRotation(GameManager.level));
 	}
 	
 	// Update is called once per frame
@@ -23,23 +23,35 @@ public class CicleRotateScript : MonoBehaviour {
 			RotateTheCircle();
 		}
 	}
-	IEnumerator ChangeRotation()
+	IEnumerator ChangeRotation(int level)
 	{
-
+		float second = 0.3f*level;
+		if (second>8) {
+			second = 8;
+		}
 		while (true) {
-			yield return new WaitForSeconds(2f);
+			
+			yield return new WaitForSeconds(Random.Range(10-second,15-second));
 			if (Random.Range(0,2)>0) {
-				rotationSpeed = -Random.Range(50,300);
+				rotationSpeed = -Random.Range(10+5*level,50+5*level);
 			} else {
-				rotationSpeed = Random.Range(50,300);
+				rotationSpeed = Random.Range(10+5*level,50+5*level);
 			}
 		}
 	}
 
-	void RotateTheCircle()
+    private	void RotateTheCircle()
 	{
 		angle = transform.rotation.eulerAngles.z;
 		angle+= rotationSpeed*Time.deltaTime;
 		transform.rotation = Quaternion.Euler(new Vector3(0,0,angle));
+	}
+
+	public void RefreshRotate()
+	{
+		if (ChangeRotationCoroutine!=null) {
+			StopCoroutine(ChangeRotationCoroutine);
+		}
+		ChangeRotationCoroutine = StartCoroutine(ChangeRotation(GameManager.level));
 	}
 }

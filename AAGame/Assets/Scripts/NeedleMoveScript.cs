@@ -7,8 +7,7 @@ public class NeedleMoveScript : MonoBehaviour {
 	// Use this for initialization
 	[SerializeField]
 	private GameObject needleBody;
-	[SerializeField]
-	private Text needleNum;
+	public Text needleNum;
 	private Rigidbody2D mBody;
 	private float forceY = 20f;
 	private bool touchedTheCircle = false;
@@ -36,7 +35,6 @@ public class NeedleMoveScript : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D target)
 	{
-
 		if (touchedTheCircle) {
 			return;
 		}
@@ -46,5 +44,11 @@ public class NeedleMoveScript : MonoBehaviour {
 			mBody.isKinematic = true;
 			gameObject.transform.SetParent(target.transform);
 		}
+		if (GameManager.needShoot<=0) {
+			if (GameManager.winGame!=null) {
+				GameManager.winGame();
+			}
+		}
+
 	}
 }
